@@ -1,5 +1,8 @@
 ---
 - hosts: all
   tasks:
-   - name: Ping Hosts
-     win_ping:
+    - name: Ping Hosts
+      debug:
+        msg: "Hello World!"
+     
+     
