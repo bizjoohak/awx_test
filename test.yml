@@ -1,9 +1,7 @@
-- name: Clone Git repository
+- name: Hello World Sample
+  hosts: all
   tasks:
-    repo: https://github.com/bizjoohak/awx_test.git
-    version: master
-    dest: /var/lib/awx/projects/
-    clone: yes
-    force: yes
-  become: yes
+    - name: Hello Message
+      debug:
+        msg: "Hello World!"
 
