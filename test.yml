@@ -1,8 +1,9 @@
----
-- hosts: all
-  tasks:
-    - name: Ping Hosts
-      debug:
-        msg: "Hello World!"
-     
-     
+- name: Clone Git repository
+  git:
+    repo: https://github.com/bizjoohak/awx_test.git
+    version: master
+    dest: /var/lib/awx/projects/
+    clone: yes
+    force: yes
+  become: yes
+
