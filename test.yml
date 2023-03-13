@@ -1,5 +1,5 @@
 - name: Clone Git repository
-  git:
+  tasks:
     repo: https://github.com/bizjoohak/awx_test.git
     version: master
     dest: /var/lib/awx/projects/
