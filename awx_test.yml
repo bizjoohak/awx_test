@@ -20,7 +20,7 @@
       docker_container:
         container: "{{ docker_container_name }}"
         src: "{{ gitlab_dest }}"
-        dest: "{{ source_path }}"
+        dest: "/home/gcp_key/test/"
         force: yes
       tags: docker
 
