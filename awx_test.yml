@@ -1,0 +1,32 @@
+- name: Deploy code from GitLab to Docker container
+  hosts: all
+  become: true
+  vars:
+    gitlab_repo: https://github.com/bizjoohak/awx_test.git
+    gitlab_branch: main
+    gitlab_dest: /var/lib/awx/projects/awx_test/
+    docker_container_name: test
+    source_path: /home/gcp_key/test/
+  tasks:
+    - name: Clone GitLab repo
+      git:
+        repo: "{{ gitlab_repo }}"
+        version: "{{ gitlab_branch }}"
+        dest: "{{ gitlab_dest }}"
+        force: yes
+      tags: github
+
+    - name: Copy code to Docker container
+      docker_container:
+        container: "{{ docker_container_name }}"
+        src: "{{ gitlab_dest }}"
+        dest: "{{ source_path }}"
+        force: yes
+      tags: docker
+
+    - name: Restart Docker container
+      docker_container:
+        name: "{{ docker_container_name }}"
+        state: restarted
+        published_ports: ["8888:8888"]
+      tags: docker
