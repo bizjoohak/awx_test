@@ -3,6 +3,6 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return 'hello docker world!'
+    return '안녕하세요'
 
 app.run(host='0.0.0.0', port=8888)
