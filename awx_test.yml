@@ -1,0 +1,42 @@
+## awx yml 파일 수정
+
+- name: Deploy code from GitLab to Docker container
+  hosts: all
+  become: true
+  vars:
+    gitlab_repo: https://github.com/bizjoohak/awx_test.git
+    gitlab_branch: main
+    gitlab_dest: /var/lib/awx/projects/awx_test/
+    docker_container_name: test
+    source_path: /home/gcp_key/test/
+  tasks:
+    - name: Clone Github repo
+      git:
+        repo: "{{ gitlab_repo }}"
+        version: "{{ gitlab_branch }}"
+        dest: "{{ gitlab_dest }}"
+        force: yes
+      tags: github
+
+    - name: Stop Docker container
+      docker_container:
+        name: "{{ docker_container_name }}"
+        state: stopped
+
+    - name: Copy files to Docker container
+      become: true
+      copy:
+        src: "{{ gitlab_dest }}"
+        dest: "{{ source_path }}"
+        # Use rsync to speed up copying of large numbers of files
+        # Note that rsync must be installed on the target host
+        rsync_opts: --archive --delete --rsync-path="sudo rsync"
+      delegate_to: "{{ docker_container_name }}"
+
+    - name: Start Docker container
+      docker_container:
+        name: "{{ docker_container_name }}"
+        state: started
+        image: test
+        volumes:
+          - "{{ dest_path }}:{{ source_path }}"
